@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
@@ -32,48 +31,49 @@ class MainActivity : ComponentActivity() {
         setContent {
             DuckerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    HelloWorld(modifier = Modifier.padding(innerPadding))
-                }
+                    NavHost(modifier = Modifier.padding(innerPadding))                }
             }
         }
     }
 }
-
 @Composable
-
-fun HelloWorld(modifier: Modifier = Modifier) {
-
-    // Déclaration de Variables
+fun HelloWorld(
+    modifier: Modifier = Modifier,
+    onPage2Click: () -> Unit // Fonction passée en paramètre
+) {
     var compteur by remember { mutableStateOf(0) }
-
 
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
-
     ) {
         Text(text = "Hello World", fontSize = 28.sp)
-        Button( onClick = { compteur ++}) {
+
+        Button(onClick = { compteur++ }) {
             Text(text = "Clique Me")
         }
-        Text(text = "Voici le compteur : $compteur")
-        Button(onClick = {
 
-        }, colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFE91E63), // Couleur de fond du bouton (ex: Rose)
-            contentColor = Color.White          // Couleur du texte et des icônes à l'intérieur
-        )) {
+        Text(text = "Voici le compteur : $compteur")
+
+        // 2. On branche l'action dans le onClick du bouton rose
+        Button(
+            onClick = onPage2Click,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFE91E63),
+                contentColor = Color.White
+            )
+        ) {
             Text(text = "Lien Page 2", fontSize = 24.sp)
         }
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun HelloWorldPreview() {
     DuckerTheme {
-        HelloWorld()
+        // 3. On fournit une action vide {} pour que la preview fonctionne
+        HelloWorld(onPage2Click = {})
     }
 }
