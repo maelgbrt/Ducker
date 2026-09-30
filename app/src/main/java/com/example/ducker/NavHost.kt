@@ -22,7 +22,7 @@ fun NavHost(modifier: Modifier = Modifier) {
                 )
             }
             entry<Destination.Page2> {
-                Page2(
+                SettingsPage(
                     onBackClick = {
                         if (backStack.size > 1) {
                             backStack.removeAt(backStack.lastIndex)
