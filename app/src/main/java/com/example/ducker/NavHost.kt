@@ -6,30 +6,39 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 
+
 @Composable
 fun NavHost(modifier: Modifier = Modifier) {
-    val backStack = rememberNavBackStack(Destination.Home)
+    val backStack = rememberNavBackStack(Destination.HomePage)
 
     NavDisplay(
         backStack = backStack,
         modifier = modifier,
         entryProvider = entryProvider {
-            entry<Destination.Home> {
-                HelloWorld(
-                    onPage2Click = {
-                        backStack.add(Destination.Page2)
+            entry<Destination.HomePage> {
+                HomePage(
+                    onNavigate = { destination ->
+                        backStack.add(destination)
                     }
                 )
             }
-            entry<Destination.Page2> {
-                Page2(
-                    onBackClick = {
-                        if (backStack.size > 1) {
-                            backStack.removeAt(backStack.lastIndex)
-                        }
+            entry<Destination.SettingsPage> {
+                SettingsPage(
+                    onNavigate = { destination ->
+                        backStack.add(destination)
                     }
                 )
             }
+            entry<Destination.UsersPage> {
+//                UsersPage();
+            }
+            entry<Destination.MatchsPage> {
+//                MatchsPage();
+            }
+            entry<Destination.DiscoversPage> {
+//                DiscoversPage();
+            }
+
         }
     )
 }

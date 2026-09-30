@@ -37,9 +37,9 @@ class MainActivity : ComponentActivity() {
     }
 }
 @Composable
-fun HelloWorld(
+fun HomePage(
     modifier: Modifier = Modifier,
-    onPage2Click: () -> Unit // Fonction passée en paramètre
+    onNavigate : (Destination) -> Unit
 ) {
     var compteur by remember { mutableStateOf(0) }
 
@@ -48,32 +48,37 @@ fun HelloWorld(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Hello World", fontSize = 28.sp)
 
-        Button(onClick = { compteur++ }) {
-            Text(text = "Clique Me")
-        }
-
-        Text(text = "Voici le compteur : $compteur")
-
-        // 2. On branche l'action dans le onClick du bouton rose
         Button(
-            onClick = onPage2Click,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFE91E63),
-                contentColor = Color.White
-            )
+            onClick = { onNavigate(Destination.SettingsPage) }
         ) {
-            Text(text = "Lien Page 2", fontSize = 24.sp)
+            Text(text = "Aller aux Réglages")
         }
+        Text(text = "Hello World", fontSize = 28.sp)
+//
+//        Button(onClick = { compteur++ }) {
+//            Text(text = "Clique Me")
+//        }
+//
+//        Text(text = "Voici le compteur : $compteur")
+//
+//        // 2. On branche l'action dans le onClick du bouton rose
+//        Button(
+//            onClick = onPage2Click,
+//            colors = ButtonDefaults.buttonColors(
+//                containerColor = Color(0xFFE91E63),
+//                contentColor = Color.White
+//            )
+//        ) {
+//            Text(text = "Lien Page 2", fontSize = 24.sp)
+//        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun HelloWorldPreview() {
+fun PageAcceuilPreview() {
     DuckerTheme {
-        // 3. On fournit une action vide {} pour que la preview fonctionne
-        HelloWorld(onPage2Click = {})
+        HomePage(onNavigate = {})
     }
 }
