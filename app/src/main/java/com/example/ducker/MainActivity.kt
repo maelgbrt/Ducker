@@ -49,10 +49,22 @@ fun HomePage(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
+//        Button(
+//            onClick = { onNavigate(Destination.SettingsPage) }
+//        ) {
+//            Text(text = "Aller aux Réglages")
+//        }
+
         Button(
-            onClick = { onNavigate(Destination.SettingsPage) }
+            onClick = { onNavigate(Destination.MyFridge) }
         ) {
-            Text(text = "Aller aux Réglages")
+            Text(text = "Aller aux Frigo")
+        }
+
+        Button(
+            onClick = { onNavigate(Destination.UsersPage) }
+        ) {
+            Text(text = "Aller au Users")
         }
         Text(text = "Hello World", fontSize = 28.sp)
 //

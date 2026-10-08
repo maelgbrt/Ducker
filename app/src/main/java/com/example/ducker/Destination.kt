@@ -13,6 +13,10 @@ sealed interface Destination : NavKey {
     @Serializable
     data object SettingsPage : Destination
 
+    @Serializable
+    data object MyFridge : Destination
+
+
 
     @Serializable
     data object DiscoversPage : Destination
