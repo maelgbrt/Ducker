@@ -16,13 +16,16 @@ sealed interface Destination : NavKey {
     @Serializable
     data object MyFridge : Destination
 
-
-
+    @Serializable
+    data object IngredientAjout : Destination
     @Serializable
     data object DiscoversPage : Destination
 
     @Serializable
     data object UsersPage : Destination
+
+    @Serializable
+    data class FrigoUser(val userId: String) : Destination //on met une class car ya des paramètres
 
     @Serializable
     data object MatchsPage : Destination

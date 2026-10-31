@@ -1,85 +1,93 @@
-package com.example.ducker.ui.feature.users
+package com.example.ducker.ui.users
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.ducker.Destination
+import com.example.ducker.ui.DuckerViewModel
+import coil.compose.rememberAsyncImagePainter
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
+import androidx.compose.ui.Alignment
+import com.example.ducker.domain.data.Frigo
 
 @Composable
-
-
-
-
 fun UsersPage(
-    modifier: Modifier = Modifier,
-    onNavigate : (Destination) -> Unit) {
-
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        topBar = {
-
-        },
-
-        bottomBar  = {
-            Box(
-                modifier = modifier.fillMaxWidth()
-                    .background(Color.Blue)
-                    .padding( 0.dp,16.dp)
-                    ,
-                        contentAlignment = Alignment.Center,
+    viewModel: DuckerViewModel,
+    onNavigate: (Destination) -> Unit
+) {
 
 
-            ){
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(17.dp),
+    val users by viewModel.users.collectAsState()
+    val error by viewModel.error.collectAsState()
 
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text(
+            text = "Liste des utilisateurs",
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
 
-                    modifier = modifier
-                        .clip(RoundedCornerShape(30.dp))
-                        .background(Color.Green)
-                        .padding(10.dp, 5.dp),
-                ) {
-                    Button(onClick = { }) {
-                        Text(text = "My Fridge")
-                    }
-                    Button(onClick = { }) {
-                        Text(text = "Explore")
-                    }
-                    Button(onClick = { }) {
-                        Text(text = "Matchs")
+        error?.let {
+            Text(
+                text = it,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
+
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(items = users, key = { it.hashCode() }) { user ->
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(8.dp)
+                    ) {
+                        Image(
+                            painter = rememberAsyncImagePainter(model = user.photo),
+                            contentDescription = "Photo de profil",
+                            modifier = Modifier
+                                .width(100.dp)
+                                .height(100.dp)
+                        )
+                        Text(
+                            text = "${user.nom} ${user.prenom}",
+                            modifier = Modifier.padding(start = 16.dp),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                        Column(
+                            Modifier.fillMaxHeight()
+                        ) {
+                            Button(onClick = { onNavigate(Destination.FrigoUser(userId = user.id)) }) {
+                                Text(text = "Voir Frigo")
+                            }
+                        }
                     }
                 }
             }
-
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            Text(
-                modifier = Modifier.padding(8.dp),
-                text =
-                    "salukekk"
-            )
-
         }
     }
-
 }

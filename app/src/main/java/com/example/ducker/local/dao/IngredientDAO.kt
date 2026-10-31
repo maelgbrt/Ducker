@@ -8,10 +8,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface IngredientDao {
+    @Upsert
+    suspend fun upsertIngredients(ingredients: List<IngredientEntity>)
 
-    @Upsert // Update + Insert
-    suspend fun upsert(ingredients: List<IngredientEntity>) // suspend : continue de tourner derrière
-
-    @Query("SELECT * FROM ingredients") // Select Ingredient
-    fun getIngredients(): Flow<List<IngredientEntity>>
+    @Query("SELECT * FROM ingredients WHERE frigoId = :frigoId")
+    fun getIngredientsForFrigo(frigoId: String): Flow<List<IngredientEntity>>
 }
