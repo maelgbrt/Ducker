@@ -8,5 +8,5 @@ enum class CategorieIngredient(val raw: String) {
     ProduitLaitier("produit_laitier"),
     Epicerie("epicerie"),
     Boisson("boisson"),
-    Autre("autre")
+    AUTRE("autre"),
 }
