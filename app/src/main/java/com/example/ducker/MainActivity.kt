@@ -66,6 +66,11 @@ fun HomePage(
         ) {
             Text(text = "Aller au Users")
         }
+        Button(
+            onClick = { onNavigate(Destination.SettingsPage) }
+        ) {
+            Text(text = "Aller aux paramètres")
+        }
         Text(text = "Hello World", fontSize = 28.sp)
 //
 //        Button(onClick = { compteur++ }) {

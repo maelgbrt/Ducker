@@ -6,9 +6,10 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.example.ducker.ui.feature.fridge.MyFridge
+import com.example.ducker.ui.feature.settings.SettingsPage
 
 import com.example.ducker.ui.feature.users.UsersPage
-
+import com.example.ducker.ui.feature.matchs.MatchsPage
 
 @Composable
 fun NavHost(modifier: Modifier = Modifier) {
@@ -25,13 +26,13 @@ fun NavHost(modifier: Modifier = Modifier) {
                     }
                 )
             }
-//            entry<Destination.SettingsPage> {
-//                SettingsPage(
-//                    onNavigate = { destination ->
-//                        backStack.add(destination)
-//                    }
-//                )
-//            }
+            entry<Destination.SettingsPage> {
+                SettingsPage(
+                    onNavigate = { destination ->
+                        backStack.add(destination)
+                    }
+                )
+            }
             entry<Destination.MyFridge> {
                 MyFridge(
                     onNavigate = { destination ->
@@ -47,7 +48,10 @@ fun NavHost(modifier: Modifier = Modifier) {
                 );
             }
             entry<Destination.MatchsPage> {
-//                MatchsPage();
+                MatchsPage(
+                            onNavigate = { destination ->
+                                        backStack.add(destination)
+                                    });
             }
             entry<Destination.DiscoversPage> {
 //                DiscoversPage();
