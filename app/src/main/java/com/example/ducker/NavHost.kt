@@ -10,8 +10,8 @@ import com.example.ducker.ui.DuckerViewModel
 import com.example.ducker.ui.UserFrigoViewModel
 import com.example.ducker.ui.feature.frigo.UserFrigo
 import com.example.ducker.ui.feature.ingredientAjout.IngredientAjout
-import com.example.ducker.ui.users.UsersPage
-
+import com.example.ducker.ui.feature.users.UsersPage
+import com.example.ducker.ui.feature.matchs.MatchsPage
 
 @Composable
 fun NavHost(

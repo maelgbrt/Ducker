@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ducker.Destination
 import com.example.ducker.R
-import com.example.ducker.ui.feature.fridge.FridgeViewModel
+//import com.example.ducker.ui.feature.fridge.FridgeViewModel
 import com.example.ducker.ui.theme.primaryLight
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -77,7 +77,7 @@ import androidx.compose.material3.IconButton
 fun MatchsPage(
     modifier: Modifier = Modifier,
     onNavigate: (Destination) -> Unit,
-    viewModel: FridgeViewModel = viewModel()
+    //viewModel: FridgeViewModel = viewModel()
 ) {
     Scaffold(
         topBar = {

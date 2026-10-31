@@ -60,9 +60,9 @@ import androidx.compose.material3.IconButton
 fun MyFridge(
     modifier: Modifier = Modifier,
     onNavigate: (Destination) -> Unit,
-    viewModel: FridgeViewModel = viewModel()
+    //viewModel: FridgeViewModel = viewModel()
 ) {
-    val ingredients by viewModel.ingredients.collectAsStateWithLifecycle()
+    //val ingredients by viewModel.ingredients.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -136,12 +136,12 @@ fun MyFridge(
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
-                items(items = ingredients) { ingredient ->
+                /*items(items = ingredients) { ingredient ->
                     IngredientItem(
                         ingredient = ingredient,
                         modifier = Modifier.fillMaxWidth()
                     )
-                }
+                }*/
             }
         }
     }
