@@ -126,7 +126,7 @@ fun SettingsPage(
                         .background(primaryLight)
                         .padding(10.dp, 5.dp),
                 ) {
-                    Button(onClick = { onNavigate(Destination.MyFridge) }) {
+                    Button(onClick = { onNavigate(Destination.FridgePage) }) {
                         Text(text = "My Fridge")
                     }
                     Button(onClick = {onNavigate(Destination.MatchsPage)}) {

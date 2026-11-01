@@ -12,6 +12,7 @@ import com.example.ducker.ui.feature.frigo.UserFrigo
 import com.example.ducker.ui.feature.ingredientAjout.IngredientAjout
 import com.example.ducker.ui.feature.users.UsersPage
 import com.example.ducker.ui.feature.matchs.MatchsPage
+import com.example.ducker.ui.feature.fridge.FridgePage
 
 @Composable
 fun NavHost(
@@ -58,20 +59,20 @@ fun NavHost(
                     viewModel = userFrigoViewModel // On passe le bon viewModel créé avec la factory
                 )
             }
-//            entry<Destination.SettingsPage> {
-//                SettingsPage(
-//                    onNavigate = { destination ->
-//                        backStack.add(destination)
-//                    }
-//                )
-//            }
-//            entry<Destination.MyFridge> {
-//                MyFridge(
-//                    onNavigate = { destination ->
-//                        backStack.add(destination)
-//                    }
-//                );
-//            }
+            entry<Destination.SettingsPage> {
+                SettingsPage(
+                    onNavigate = { destination ->
+                        backStack.add(destination)
+                    }
+                )
+            }
+            entry<Destination.FridgePage> {
+                FridgePage(
+                    onNavigate = { destination ->
+                        backStack.add(destination)
+                    }
+                );
+            }
             entry<Destination.UsersPage> {
                 UsersPage(
                     viewModel = viewModel,

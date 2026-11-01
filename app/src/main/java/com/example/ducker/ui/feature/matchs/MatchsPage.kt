@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+//import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,10 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.TestModifierUpdaterLayout
+//import androidx.compose.ui.layout.TestModifierUpdaterLayout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+//import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ducker.Destination
 import com.example.ducker.R
 //import com.example.ducker.ui.feature.fridge.FridgeViewModel
@@ -39,8 +39,8 @@ import androidx.annotation.DrawableRes
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.rememberSwipeToDismissBoxState
-import android.R.attr.direction
-import android.graphics.drawable.Icon
+//import android.R.attr.direction
+//import android.graphics.drawable.Icon
 import com.example.ducker.ui.theme.errorContainerLight
 import com.example.ducker.ui.theme.primaryContainerLight
 import androidx.compose.material3.Icon
@@ -52,23 +52,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.setValue
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+//import androidx.compose.foundation.layout.Column
+//import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.height
+//import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material3.Icon
+//import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SwipeToDismissBox
+/*import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.sp*/
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.IconButton
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -114,7 +114,7 @@ fun MatchsPage(
                         .background(primaryLight)
                         .padding(10.dp, 5.dp),
                 ) {
-                    Button(onClick = { onNavigate(Destination.MyFridge) }) {
+                    Button(onClick = { onNavigate(Destination.FridgePage) }) {
                         Text(text = "My Fridge")
                     }
                     Button(onClick = { onNavigate(Destination.MatchsPage) }) {

@@ -14,7 +14,7 @@ sealed interface Destination : NavKey {
     data object SettingsPage : Destination
 
     @Serializable
-    data object MyFridge : Destination
+    data object FridgePage : Destination
 
     @Serializable
     data object IngredientAjout : Destination

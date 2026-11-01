@@ -2,27 +2,27 @@ package com.example.ducker.ui.feature.users
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.Image
+//import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+//import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
+//import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+//import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+/*import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.items*/
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
+//import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -32,7 +32,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.getValue
+//import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
@@ -45,19 +45,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ducker.Destination
 import com.example.ducker.ui.DuckerViewModel
-import coil.compose.rememberAsyncImagePainter
+/*import coil.compose.rememberAsyncImagePainter
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
-import com.example.ducker.domain.data.Frigo
+import com.example.ducker.domain.data.Frigo*/
 import com.example.ducker.R
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+/*import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ducker.domain.data.Ingredient
 //import com.example.ducker.ui.feature.fridge.FridgeViewModel
 import com.example.ducker.ui.feature.fridge.IngredientItem
-import com.example.ducker.ui.theme.onPrimaryLight
+import com.example.ducker.ui.theme.onPrimaryLight*/
 import com.example.ducker.ui.theme.primaryLight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.runtime.remember
@@ -67,7 +67,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.offset
+//import androidx.compose.foundation.layout.offset
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
@@ -145,7 +145,7 @@ fun UsersPage(
                         .background(primaryLight)
                         .padding(10.dp, 5.dp),
                 ) {
-                    Button(onClick = { onNavigate(Destination.MyFridge) }) {
+                    Button(onClick = { onNavigate(Destination.FridgePage) }) {
                         Text(text = "My Fridge")
                     }
                     Button(onClick = {onNavigate(Destination.MatchsPage)}) {

@@ -60,7 +60,7 @@ fun HomePage(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(onClick = { onNavigate(Destination.MyFridge) }) {
+        Button(onClick = { onNavigate(Destination.FridgePage) }) {
             Text(text = "Aller aux Frigo")
         }
 
