@@ -30,6 +30,10 @@ class DuckerViewModel(
         refresh()
     }
 
+    fun registerLikeOrDislike(targetUserId: String, isLike: Boolean) {
+        viewModelScope.launch {
+        }
+    }
     fun refresh() {
         viewModelScope.launch {
             try {

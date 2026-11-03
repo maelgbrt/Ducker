@@ -83,8 +83,9 @@ fun NavHost(
                 )
             }
 
-            entry<Destination.UsersPage> {
+            entry<Destination.UsersPage> { destination ->
                 UsersPage(
+                    userId = destination.userId,
                     viewModel = viewModel,
                     onNavigate = onNavigate
                 )

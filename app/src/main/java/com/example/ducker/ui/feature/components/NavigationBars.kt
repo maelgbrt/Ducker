@@ -84,9 +84,9 @@ fun BottomNavBar(
             Button(onClick = { onNavigate(Destination.MatchsPage) }) {
                 Text(text = "Explore")
             }
-            Button(onClick = { onNavigate(Destination.UsersPage) }) {
+            /*Button(onClick = { onNavigate(Destination.UsersPage) }) {
                 Text(text = "Matchs")
-            }
+            }*/
         }
     }
 }

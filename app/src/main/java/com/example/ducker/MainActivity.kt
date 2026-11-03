@@ -64,9 +64,11 @@ fun HomePage(
             Text(text = "Aller aux Frigo")
         }
 
-        Button(onClick = { onNavigate(Destination.UsersPage) }) {
+        /*Button(onClick = {
+            onNavigate(Destination.UsersPage)
+        }) {
             Text(text = "Aller au Users")
-        }
+        }*/
         Button(
             onClick = { onNavigate(Destination.SettingsPage) }
         ) {

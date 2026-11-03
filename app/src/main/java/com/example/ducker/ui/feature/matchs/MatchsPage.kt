@@ -87,14 +87,24 @@ fun MatchsPage(
     viewModel: DuckerViewModel,
     onNavigate: (Destination) -> Unit,
 ) {
-    val users by viewModel.users.collectAsState()
+    val allUsers by viewModel.users.collectAsState()
+    val users = allUsers.filter { it.id != "user_001" }
     var currentIndex by remember { mutableIntStateOf(0) }
     val currentUser = users.getOrNull(currentIndex)
 
-    // TODO : enregistrer le match / le refus côté back
-    val onMatch: () -> Unit = { currentIndex++ }
-    val onPass: () -> Unit = { currentIndex++ }
+    val onMatch: () -> Unit = {
+        currentUser?.let { user ->
+            viewModel.registerLikeOrDislike(targetUserId = user.id, isLike = true)
+            onNavigate(Destination.UsersPage(userId = user.id))
+        }
+    }
 
+    val onPass: () -> Unit = {
+        currentUser?.let { user ->
+            viewModel.registerLikeOrDislike(targetUserId = user.id, isLike = false)
+        }
+        currentIndex++
+    }
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
