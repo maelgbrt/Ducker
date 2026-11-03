@@ -174,7 +174,8 @@ fun UserCard(
     Column(modifier = modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxWidth()
         ) {
             Image(
                 painter = rememberAsyncImagePainter(model = user.photo),
@@ -183,9 +184,9 @@ fun UserCard(
                 modifier = Modifier
                     .size(100.dp)
                     .clip(RoundedCornerShape(12.dp))
-
             )
 
+            // Bloc de bienvenue coloré
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -196,7 +197,7 @@ fun UserCard(
                 Text(
                     text = "Bonjour ${user.prenom},",
                     color = onPrimaryLight,
-                    fontSize = 25.sp,
+                    fontSize = 22.sp,
                     fontWeight = FontWeight.Bold
                 )
                 if (frigoId != null) {
@@ -206,28 +207,21 @@ fun UserCard(
                         fontSize = 12.sp
                     )
                 }
-            /*Button(onClick = {
-                Toast.makeText(
-                    context,
-                    "On veut vraiment partager le profil ?",
-                    Toast.LENGTH_LONG
-                ).show()
-            }) {
-                Text(text = "Partager")
-            }*/
+            }
         }
 
-            Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
-            Text(
-                text = "${user.prenom} ${user.nom}",
-                style = MaterialTheme.typography.titleMedium
-            )
-            Text(
-                text = "${user.localisation} · ${user.nombreIngredients} ingrédients",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+        // Nom et localisation sortis de la Row pour occuper toute la largeur proprement
+        Text(
+            text = "${user.prenom} ${user.nom}",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = "${user.localisation} · ${user.nombreIngredients} ingrédients",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
