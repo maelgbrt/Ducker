@@ -1,9 +1,9 @@
 package com.example.ducker
 
 import android.app.Application
-import com.example.ducker.local.DuckerDatabaseHolder
-import com.example.ducker.remote.FoodApi
-import com.example.ducker.repository.DuckerRepository
+import com.example.ducker.data.local.DuckerDatabaseHolder
+import com.example.ducker.data.remote.FoodApi
+import com.example.ducker.data.repository.DuckerRepository
 
 class DuckerApplication : Application() {
 

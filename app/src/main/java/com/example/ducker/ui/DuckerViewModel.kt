@@ -3,8 +3,8 @@ package com.example.ducker.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.ducker.local.entity.UserEntity
-import com.example.ducker.repository.DuckerRepository
+import com.example.ducker.data.local.entity.UserEntity
+import com.example.ducker.data.repository.DuckerRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,6 +25,8 @@ class DuckerViewModel(
 
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
+
+
 
     init {
         refresh()

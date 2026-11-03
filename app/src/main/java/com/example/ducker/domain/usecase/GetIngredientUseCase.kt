@@ -1,7 +1,7 @@
 package com.example.ducker.domain.usecase
 
-import com.example.ducker.domain.data.Ingredient
-import com.example.ducker.repository.DuckerRepository
+import com.example.ducker.domain.model.Ingredient
+import com.example.ducker.data.repository.DuckerRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
