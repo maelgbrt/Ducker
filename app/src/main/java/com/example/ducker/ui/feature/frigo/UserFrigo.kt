@@ -33,6 +33,7 @@ import com.example.ducker.ui.theme.primaryLight
 fun UserFrigo(
     userId: String,
     viewModel: UserFrigoViewModel,
+    isDarkMode: Boolean,
     onNavigate: (Destination) -> Unit,
     owner: UserEntity? = null
 ) {
@@ -51,8 +52,12 @@ fun UserFrigo(
                 onSettings = { onNavigate(Destination.SettingsPage) }
             )
         },
-        bottomBar = { BottomNavBar(onNavigate = onNavigate) }
-    ) { innerPadding ->
+        bottomBar = {
+            BottomNavBar(
+                isDarkMode = isDarkMode,
+                onNavigate = onNavigate
+            )
+        } ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()

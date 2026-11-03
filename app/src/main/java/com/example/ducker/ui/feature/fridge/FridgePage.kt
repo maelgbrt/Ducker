@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ducker.Destination
 import com.example.ducker.domain.data.Ingredient
 import com.example.ducker.local.entity.UserEntity
@@ -35,6 +36,8 @@ import com.example.ducker.ui.components.DuckerTopBar
 import com.example.ducker.ui.theme.onPrimaryLight
 import com.example.ducker.ui.theme.primaryLight
 import coil.compose.rememberAsyncImagePainter
+import com.example.ducker.NavHost
+import com.example.ducker.ui.theme.DuckerTheme
 import java.io.File
 import java.io.FileOutputStream
 
@@ -108,7 +111,7 @@ fun FridgePage(
                 onSettings = { onNavigate(Destination.SettingsPage) }
             )
         },
-        bottomBar = { BottomNavBar(onNavigate = onNavigate) }
+        bottomBar = { BottomNavBar(isDarkMode = viewModel.isDarkMode, onNavigate = onNavigate) }
     ) { paddingValues ->
         Column(
             modifier = Modifier

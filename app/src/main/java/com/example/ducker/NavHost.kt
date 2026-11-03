@@ -60,12 +60,14 @@ fun NavHost(
                 UserFrigo(
                     onNavigate = { dest -> backStack.add(dest) },
                     userId = destination.userId,
-                    viewModel = userFrigoViewModel
+                    viewModel = userFrigoViewModel,
+                    isDarkMode = viewModel.isDarkMode,
                 )
             }
 
             entry<Destination.SettingsPage> {
-                SettingsPage(onNavigate = onNavigate)
+                SettingsPage(onNavigate = onNavigate,
+                    viewModel = viewModel)
             }
 
             entry<Destination.FridgePage> {

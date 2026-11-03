@@ -1,5 +1,7 @@
 package com.example.ducker.ui
 
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -11,10 +13,17 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-
+import androidx.compose.runtime.getValue
 class DuckerViewModel(
     val repository: DuckerRepository
 ) : ViewModel() {
+
+    var isDarkMode by mutableStateOf(false)
+        private set
+
+    fun toggleDarkMode(enabled: Boolean) {
+        isDarkMode = enabled
+    }
 
     val users: StateFlow<List<UserEntity>> = repository.getUser()
         .stateIn(
@@ -42,7 +51,7 @@ class DuckerViewModel(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                e.printStackTrace() // <-- Regarde dans l'onglet "Logcat" d'Android Studio ce qui s'affiche ici
+                e.printStackTrace()
                 _error.value = e.message ?: "Erreur de synchronisation"
             }
         }

@@ -114,7 +114,7 @@ fun MatchsPage(
                 onSettings = { onNavigate(Destination.SettingsPage) }
             )
         },
-        bottomBar = { BottomNavBar(onNavigate = onNavigate) }
+        bottomBar = { BottomNavBar(isDarkMode = viewModel.isDarkMode, onNavigate = onNavigate) }
     ) { innerPadding ->
         Column(
             modifier = Modifier

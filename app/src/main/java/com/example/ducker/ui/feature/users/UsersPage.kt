@@ -65,7 +65,7 @@ fun UsersPage(
                 onSettings = { onNavigate(Destination.SettingsPage) }
             )
         },
-        bottomBar = { BottomNavBar(onNavigate = onNavigate) }
+        bottomBar = { BottomNavBar(isDarkMode = viewModel.isDarkMode, onNavigate = onNavigate) }
     ) { innerPadding ->
         Box(
             modifier = Modifier

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -25,7 +26,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.ducker.ui.DuckerViewModel
 import com.example.ducker.Destination
+import com.example.ducker.ui.theme.primaryDark
 import com.example.ducker.ui.theme.primaryLight
 
 //[onSettings] = null masque le bouton paramètres.
@@ -62,12 +65,15 @@ fun DuckerTopBar(
 
 @Composable
 fun BottomNavBar(
+    isDarkMode: Boolean,
     onNavigate: (Destination) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val rowBackgroundColor = if (isDarkMode) primaryDark else primaryLight
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .navigationBarsPadding()
             .padding(vertical = 16.dp),
         contentAlignment = Alignment.Center
     ) {
@@ -75,18 +81,15 @@ fun BottomNavBar(
             horizontalArrangement = Arrangement.spacedBy(17.dp),
             modifier = Modifier
                 .clip(RoundedCornerShape(30.dp))
-                .background(primaryLight)
+                .background(rowBackgroundColor)
                 .padding(horizontal = 10.dp, vertical = 5.dp)
         ) {
             Button(onClick = { onNavigate(Destination.FridgePage) }) {
-                Text(text = "My Fridge")
+                Text(text = "Mon frigo")
             }
             Button(onClick = { onNavigate(Destination.MatchsPage) }) {
-                Text(text = "Explore")
+                Text(text = "Découvrir")
             }
-            /*Button(onClick = { onNavigate(Destination.UsersPage) }) {
-                Text(text = "Matchs")
-            }*/
         }
     }
 }
