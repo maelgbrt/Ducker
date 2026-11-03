@@ -71,109 +71,78 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.sp*/
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.IconButton
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.graphics.Brush
+import com.example.ducker.ui.DuckerViewModel
+import com.example.ducker.ui.components.BottomNavBar
+import com.example.ducker.ui.components.DuckerTopBar
+import com.example.ducker.local.entity.UserEntity
+import coil.compose.rememberAsyncImagePainter
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MatchsPage(
     modifier: Modifier = Modifier,
+    viewModel: DuckerViewModel,
     onNavigate: (Destination) -> Unit,
-    //viewModel: FridgeViewModel = viewModel()
 ) {
+    val users by viewModel.users.collectAsState()
+    var currentIndex by remember { mutableIntStateOf(0) }
+    val currentUser = users.getOrNull(currentIndex)
+
+    // TODO : enregistrer le match / le refus côté back
+    val onMatch: () -> Unit = { currentIndex++ }
+    val onPass: () -> Unit = { currentIndex++ }
+
     Scaffold(
+        modifier = modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(
-                title = { Text(text = "Explore") },
-                navigationIcon = {
-                    TextButton(onClick = { onNavigate(Destination.HomePage) }) {
-                        Text(text = "Retour")
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { onNavigate(Destination.SettingsPage) }) {
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = "Paramètres"
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent
-                )
+            DuckerTopBar(
+                title = "Explore",
+                onBack = { onNavigate(Destination.HomePage) },
+                onSettings = { onNavigate(Destination.SettingsPage) }
             )
         },
-        bottomBar = {
-            Box(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(0.dp, 16.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(17.dp),
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(30.dp))
-                        .background(primaryLight)
-                        .padding(10.dp, 5.dp),
-                ) {
-                    Button(onClick = { onNavigate(Destination.FridgePage) }) {
-                        Text(text = "My Fridge")
-                    }
-                    Button(onClick = { onNavigate(Destination.MatchsPage) }) {
-                        Text(text = "Explore")
-                    }
-                    Button(onClick = { onNavigate(Destination.UsersPage) }) {
-                        Text(text = "Matchs")
-                    }
-                }
-            }
-        }
+        bottomBar = { BottomNavBar(onNavigate = onNavigate) }
     ) { innerPadding ->
-        var currentIndex by remember { mutableIntStateOf(0)}
-        val currentUser = sampleUsers.getOrNull(currentIndex)
-
-        fun onMatch() {
-            //TODO
-            currentIndex++
-        }
-
-        fun onPass() {
-            // TODO
-            currentIndex++
-        }
-
         Column(
-            modifier = modifier
-                .fillMaxSize(),
-            //.padding(innerPadding),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             if (currentUser == null) {
                 Text(text = "Plus personne avec qui manger (◞‸◟；)")
             } else {
+                // Une clé par utilisateur : chaque carte repart avec un état de swipe neuf
                 key(currentUser.id) {
                     SwipeableCard(
                         user = currentUser,
-                        onMatch = ::onMatch,
-                        onPass = ::onPass,
+                        onMatch = onMatch,
+                        onPass = onPass,
                         modifier = Modifier
                             .fillMaxWidth(0.85f)
                             .aspectRatio(2f / 3f)
                     )
                 }
+
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Button(onClick = ::onMatch) {Text(text = "Miam !")}
-                    Button(onClick = ::onPass) {Text(text = "Bof...")}
+                    Button(onClick = onMatch) { Text(text = "Miam !") }
+                    Button(onClick = onPass) { Text(text = "Bof...") }
                 }
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SwipeableCard(
-    user : MatchUser,
+    user: UserEntity,
     onMatch: () -> Unit,
     onPass: () -> Unit,
     modifier: Modifier = Modifier
@@ -200,10 +169,10 @@ fun SwipeableCard(
                 }
             )
             Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(color)
-                        .padding(horizontal = 24.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color)
+                    .padding(horizontal = 24.dp),
                 contentAlignment = when (direction) {
                     SwipeToDismissBoxValue.StartToEnd -> Alignment.CenterStart
                     else -> Alignment.CenterEnd
@@ -229,44 +198,33 @@ fun SwipeableCard(
             modifier = Modifier.fillMaxSize()
         ) {
             Image(
-                painter = painterResource(id = R.drawable.leading_element),
+                painter = rememberAsyncImagePainter(model = user.photo), //erreur : Unresolved reference 'rememberAsyncImagePainter'.
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.6f))
+                        )
+                    )
+            )
+
             Column(
                 modifier = Modifier.align(Alignment.BottomStart)
                     .padding(16.dp)
             ) {
                 Text(
-                    text = user.name,
+                    text = "${user.prenom} ${user.nom}",
                     color = Color.White,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
                 )
-                Text(text = user.location, color = Color.White, fontSize = 14.sp )
+                Text(text = user.localisation, color = Color.White, fontSize = 14.sp )
             }
         }
     }
-
-
-
 }
-
-
-// données de tests
-
-data class MatchUser(
-    val id: Int,
-    val name: String,
-    val location: String,
-    @DrawableRes val imageRes: Int
-)
-
-private val sampleUsers = listOf(
-    MatchUser(1, "Camille", "Lyon", R.drawable.leading_element),
-    MatchUser(2, "Thomas", "Paris", R.drawable.leading_element),
-    MatchUser(3, "Inès", "Marseille", R.drawable.leading_element),
-    MatchUser(4, "Hugo", "Bordeaux", R.drawable.leading_element)
-)
-

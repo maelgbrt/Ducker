@@ -67,11 +67,15 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.height
 //import androidx.compose.foundation.layout.offset
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.ui.platform.LocalDensity
+import com.example.ducker.ui.components.BottomNavBar
+import com.example.ducker.ui.components.DuckerTopBar
 import com.example.ducker.ui.feature.settings.TextPrimary
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -89,6 +93,11 @@ fun UsersPage(
     //val ingredients by viewModel.ingredients.collectAsStateWithLifecycle()
     var currentImageSize by remember { mutableStateOf(maxImageSize) }
     var imageScale by remember { mutableFloatStateOf(1f) }
+         val density = LocalDensity.current
+         val maxPx = with(density) { maxImageSize.toPx() }
+         val minPx = with(density) { minImageSize.toPx() }
+
+         var headerPx by remember { mutableFloatStateOf(maxPx) }
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
@@ -109,64 +118,30 @@ fun UsersPage(
             }
         }
     }
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "C'est un match !") },
-                navigationIcon = {
-                    TextButton(onClick = { onNavigate(Destination.HomePage) }) {
-                        Text(text = "Retour")
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { onNavigate(Destination.SettingsPage) }) {
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = "Paramètres"
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent
-                )
-            )
-        },
-        bottomBar = {
-            Box(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(0.dp, 16.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(17.dp),
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(30.dp))
-                        .background(primaryLight)
-                        .padding(10.dp, 5.dp),
-                ) {
-                    Button(onClick = { onNavigate(Destination.FridgePage) }) {
-                        Text(text = "My Fridge")
-                    }
-                    Button(onClick = {onNavigate(Destination.MatchsPage)}) {
-                        Text(text = "Explore")
-                    }
-                    Button(onClick = { onNavigate(Destination.UsersPage) }) {
-                        Text(text = "Matchs")
-                    }
-                }
-            }
-        }
-    ) { innerPadding ->
+         Scaffold(
+             modifier = modifier.fillMaxSize(),
+             topBar = {
+                 DuckerTopBar(
+                     title = "C'est un match !",
+                     onBack = { onNavigate(Destination.HomePage) },
+                     onSettings = { onNavigate(Destination.SettingsPage) }
+                 )
+             },
+             bottomBar = { BottomNavBar(onNavigate = onNavigate) }
+         ) { innerPadding ->
         Column(
-
             modifier = Modifier
                 .padding(innerPadding)
                 //.background(SecondaryPurple)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .nestedScroll(nestedScrollConnection),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Box(Modifier.nestedScroll(nestedScrollConnection)) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(with(density) { headerPx.toDp() })
+            ) {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {

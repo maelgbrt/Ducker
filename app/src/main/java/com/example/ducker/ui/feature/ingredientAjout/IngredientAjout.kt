@@ -1,67 +1,56 @@
 package com.example.ducker.ui.feature.ingredientAjout
 
-import android.widget.Button
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.DatePickerState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import com.example.ducker.Destination
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.example.ducker.Destination
+import com.example.ducker.ui.components.DuckerTopBar
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IngredientAjout(
-    onNavigate : (Destination) -> Unit,
-
+    onNavigate: (Destination) -> Unit,
 ) {
-
-    var description by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
     var datePeremption by remember { mutableStateOf("") }
 
-
     Scaffold(
+        modifier = Modifier.fillMaxSize(),
         topBar = {
-        TopAppBar(
-            title = { Text(text = "Ajouter ingrédients") },
-            navigationIcon = {
-                TextButton(onClick = { onNavigate(Destination.HomePage) }) {
-                    Text(text = "Retour")
-                }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent
+            DuckerTopBar(
+                title = "Ajouter un ingrédient",
+                onBack = { onNavigate(Destination.HomePage) }
             )
-        )
-    },) {
-        paddingValues ->
-        Column() {
-            Text(
-                text = name,
-                modifier = Modifier.padding(paddingValues)
-            )
-
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = 16.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
                 label = { Text("Nom") },
-                minLines = 2,
+                singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -72,21 +61,21 @@ fun IngredientAjout(
                 minLines = 2,
                 modifier = Modifier.fillMaxWidth()
             )
+
             OutlinedTextField(
                 value = datePeremption,
-                onValueChange = {datePeremption = it},
-                label = { Text("Date de péremption")
-                },
+                onValueChange = { datePeremption = it },
+                label = { Text("Date de péremption") },
+                singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
-                Button(onClick = { },
-                    modifier = Modifier.fillMaxSize()) {
-                    Text(text = "Ajouter un ingrédient")
-                }
 
+            Button(
+                onClick = { /* TODO : envoyer au back */ },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Ajouter un ingrédient")
             }
         }
-
-
-
     }
+}

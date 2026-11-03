@@ -13,6 +13,7 @@ import com.example.ducker.ui.feature.ingredientAjout.IngredientAjout
 import com.example.ducker.ui.feature.users.UsersPage
 import com.example.ducker.ui.feature.matchs.MatchsPage
 import com.example.ducker.ui.feature.fridge.FridgePage
+import com.example.ducker.ui.feature.settings.SettingsPage
 
 @Composable
 fun NavHost(
@@ -21,34 +22,37 @@ fun NavHost(
 ) {
     val backStack = rememberNavBackStack(Destination.HomePage)
 
+    val onNavigate: (Destination) -> Unit = { destination ->
+        when {
+            destination == Destination.HomePage -> {
+                while (backStack.size > 1) backStack.removeAt(backStack.lastIndex)
+            }
+            backStack.lastOrNull() != destination -> backStack.add(destination)
+        }
+    }
+
+    val onBack: () -> Unit = {
+        if (backStack.size > 1) backStack.removeAt(backStack.lastIndex)
+    }
+
     NavDisplay(
         backStack = backStack,
         modifier = modifier,
         entryProvider = entryProvider {
+
             entry<Destination.HomePage> {
-                HomePage(
-                    onNavigate = { destination ->
-                        backStack.add(destination)
-                    }
-                )
+                HomePage(onNavigate = onNavigate)
             }
 
-            entry < Destination.IngredientAjout>{
-                IngredientAjout (
-                    onNavigate = { destination ->
-                        backStack.add(destination)
-                    }
-                )
+            entry<Destination.IngredientAjout> {
+                IngredientAjout(onNavigate = onNavigate)
             }
 
             entry<Destination.FrigoUser> { destination ->
-                // Récupération repository
-                val repository = viewModel.repository
-
-                // Utilisation Factory
                 val userFrigoViewModel: UserFrigoViewModel = viewModel(
+                    key = "frigo_${destination.userId}",
                     factory = UserFrigoViewModel.Factory(
-                        repository = repository,
+                        repository = viewModel.repository,
                         userId = destination.userId
                     )
                 )
@@ -56,41 +60,42 @@ fun NavHost(
                 UserFrigo(
                     onNavigate = { dest -> backStack.add(dest) },
                     userId = destination.userId,
-                    viewModel = userFrigoViewModel // On passe le bon viewModel créé avec la factory
+                    viewModel = userFrigoViewModel
                 )
             }
+
             entry<Destination.SettingsPage> {
-                SettingsPage(
-                    onNavigate = { destination ->
-                        backStack.add(destination)
-                    }
+                SettingsPage(onNavigate = onNavigate)
+            }
+
+            entry<Destination.FridgePage> {
+                val fridgeViewModel: UserFrigoViewModel = viewModel(
+                    key = "frigo_user_001",
+                    factory = UserFrigoViewModel.Factory(
+                        repository = viewModel.repository,
+                        userId = "user_001"
+                    )
+                )
+                FridgePage(
+                    viewModel = viewModel,
+                    frigoViewModel = fridgeViewModel,
+                    onNavigate = onNavigate
                 )
             }
-            entry<Destination.FridgePage> {
-                FridgePage(
-                    onNavigate = { destination ->
-                        backStack.add(destination)
-                    }
-                );
-            }
+
             entry<Destination.UsersPage> {
                 UsersPage(
                     viewModel = viewModel,
-                    onNavigate = { destination ->
-                        backStack.add(destination)
-                    }
+                    onNavigate = onNavigate
                 )
             }
+
             entry<Destination.MatchsPage> {
                 MatchsPage(
-                            onNavigate = { destination ->
-                                        backStack.add(destination)
-                                    });
+                    viewModel = viewModel,
+                    onNavigate = onNavigate
+                )
             }
-            entry<Destination.DiscoversPage> {
-//                DiscoversPage();
-            }
-
         }
     )
 }

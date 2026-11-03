@@ -49,68 +49,45 @@ import com.example.ducker.ui.theme.onPrimaryLight
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import com.example.ducker.domain.data.CategorieIngredient
+import com.example.ducker.local.entity.UserEntity
+import com.example.ducker.ui.components.BottomNavBar
+import com.example.ducker.ui.components.DuckerTopBar
+import com.example.ducker.ui.DuckerViewModel
+import com.example.ducker.ui.UserFrigoViewModel
+import coil.compose.rememberAsyncImagePainter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FridgePage(
     modifier: Modifier = Modifier,
+    viewModel: DuckerViewModel,
+    frigoViewModel: UserFrigoViewModel,
     onNavigate: (Destination) -> Unit,
-    //viewModel: FridgeViewModel = viewModel()
-) {
-    //val ingredients by viewModel.ingredients.collectAsStateWithLifecycle()
+
+    ) {
+    val users by viewModel.users.collectAsState()
+    val frigo by frigoViewModel.frigo.collectAsState()
+    val ingredients by frigoViewModel.ingredients.collectAsState()
+    val me = users.firstOrNull { it.id == "user_001" }
 
     Scaffold(
+        modifier = modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(
-                title = { Text(text = "Explore") },
-                navigationIcon = {
-                    TextButton(onClick = { onNavigate(Destination.HomePage) }) {
-                        Text(text = "Retour")
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { onNavigate(Destination.SettingsPage) }) {
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = "Paramètres"
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent
-                )
+            DuckerTopBar(
+                title = "Mon frigo",
+                onBack = { onNavigate(Destination.HomePage) },
+                onSettings = { onNavigate(Destination.SettingsPage) }
             )
         },
-        bottomBar = {
-            Box(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(0.dp, 16.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(17.dp),
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(30.dp))
-                        .background(primaryLight)
-                        .padding(10.dp, 5.dp),
-                ) {
-                    Button(onClick = { onNavigate(Destination.FridgePage) }) {
-                        Text(text = "My Fridge")
-                    }
-                    Button(onClick = {onNavigate(Destination.MatchsPage)}) {
-                        Text(text = "Explore")
-                    }
-                    Button(onClick = { onNavigate(Destination.UsersPage) }) {
-                        Text(text = "Matchs")
-                    }
-                }
-            }
-        }
+        bottomBar = { BottomNavBar(onNavigate = onNavigate) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -118,9 +95,12 @@ fun FridgePage(
                 .padding(paddingValues)
         ) {
             UserCard(
+                user = me,
+                frigoId = frigo?.id?.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
+
             )
 
             LazyColumn(
@@ -136,12 +116,12 @@ fun FridgePage(
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
-                /*items(items = ingredients) { ingredient ->
+                items(items = ingredients) { ingredient ->
                     IngredientItem(
                         ingredient = ingredient,
                         modifier = Modifier.fillMaxWidth()
                     )
-                }*/
+                }
             }
         }
     }
@@ -182,10 +162,14 @@ fun IngredientItem(
 
 @Composable
 fun UserCard(
-    modifier: Modifier = Modifier,
-    user: User = userTest
+    user: UserEntity?,
+    frigoId: String?,
+    modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
+    if (user == null) {
+        Text(text = "Chargement du profil...", modifier = modifier)
+        return
+    }
 
     Column(modifier = modifier) {
         Row(
@@ -193,12 +177,13 @@ fun UserCard(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Image(
-                painter = painterResource(id = user.imageRes),
-                contentDescription = null,
+                painter = rememberAsyncImagePainter(model = user.photo),
+                contentDescription = "Photo de profil",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(100.dp)
                     .clip(RoundedCornerShape(12.dp))
+
             )
 
             Column(
@@ -209,17 +194,18 @@ fun UserCard(
                     .padding(12.dp)
             ) {
                 Text(
-                    text = "Bonjour ${user.name},",
+                    text = "Bonjour ${user.prenom},",
                     color = onPrimaryLight,
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold
                 )
-                Text(
-                    text = "Frigo ${user.id}",
-                    color = onPrimaryLight,
-                    fontSize = 10.sp
-                )
-            }
+                if (frigoId != null) {
+                    Text(
+                        text = "Frigo $frigoId",
+                        color = onPrimaryLight,
+                        fontSize = 12.sp
+                    )
+                }
             /*Button(onClick = {
                 Toast.makeText(
                     context,
@@ -231,22 +217,17 @@ fun UserCard(
             }*/
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-        Text(text = "Description", style = MaterialTheme.typography.titleMedium)
-        Text(text = user.description, style = MaterialTheme.typography.bodyMedium)
+            Text(
+                text = "${user.prenom} ${user.nom}",
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                text = "${user.localisation} · ${user.nombreIngredients} ingrédients",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 }
-
-// TODO : bons champs
-data class User(
-    val id: Int,
-    val name: String,
-    val location: String,
-    val description: String,
-    @DrawableRes val imageRes: Int
-)
-
-private val userTest = User(1, "Camille", "Lyon",
-    "Vous savez, moi je ne crois pas qu’il y ait de bonne ou de mauvaise situation.",
-    R.drawable.leading_element)
