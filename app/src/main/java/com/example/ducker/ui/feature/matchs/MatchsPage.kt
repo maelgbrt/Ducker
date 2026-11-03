@@ -110,7 +110,7 @@ fun MatchsPage(
         topBar = {
             DuckerTopBar(
                 title = "Explore",
-                onBack = { onNavigate(Destination.HomePage) },
+                onBack = { onNavigate(Destination.FridgePage) },
                 onSettings = { onNavigate(Destination.SettingsPage) }
             )
         },

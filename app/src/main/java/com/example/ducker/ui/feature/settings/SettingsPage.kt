@@ -1,5 +1,8 @@
 package com.example.ducker.ui.feature.settings
 
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.ducker.Destination
@@ -73,12 +77,14 @@ fun SettingsPage(
     onNavigate: (Destination) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
             DuckerTopBar(
                 title = "Paramètres",
-                onBack = { onNavigate(Destination.HomePage) }
+                onBack = { onNavigate(Destination.FridgePage) }
             )
         },
         bottomBar = { BottomNavBar(onNavigate = onNavigate) }
@@ -90,7 +96,16 @@ fun SettingsPage(
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // TODO : brancher chaque action quand les pages existeront
+            SettingsItem(
+                name = "Autorisations",
+                desc = "Gérer les permissions dans les réglages du téléphone",
+                onClick = {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.fromParts("package", context.packageName, null)
+                    }
+                    context.startActivity(intent)
+                }
+            )
             SettingsItem(
                 name = "Mode sombre",
                 desc = "Bientôt disponible",
@@ -114,4 +129,3 @@ fun SettingsPage(
         }
     }
 }
-

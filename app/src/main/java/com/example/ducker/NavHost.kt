@@ -20,11 +20,11 @@ fun NavHost(
     modifier: Modifier = Modifier,
     viewModel: DuckerViewModel,
 ) {
-    val backStack = rememberNavBackStack(Destination.HomePage)
+    val backStack = rememberNavBackStack(Destination.FridgePage)
 
     val onNavigate: (Destination) -> Unit = { destination ->
         when {
-            destination == Destination.HomePage -> {
+            destination == Destination.HomePage || destination == Destination.FridgePage -> {
                 while (backStack.size > 1) backStack.removeAt(backStack.lastIndex)
             }
             backStack.lastOrNull() != destination -> backStack.add(destination)
@@ -40,9 +40,9 @@ fun NavHost(
         modifier = modifier,
         entryProvider = entryProvider {
 
-            entry<Destination.HomePage> {
+            /*entry<Destination.HomePage> {
                 HomePage(onNavigate = onNavigate)
-            }
+            }*/
 
             entry<Destination.IngredientAjout> {
                 IngredientAjout(onNavigate = onNavigate)

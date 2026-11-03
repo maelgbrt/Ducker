@@ -61,7 +61,7 @@ fun UsersPage(
         topBar = {
             DuckerTopBar(
                 title = matchedUser?.let { "${it.prenom}" } ?: "Profil",
-                onBack = { onNavigate(Destination.HomePage) },
+                onBack = { onNavigate(Destination.FridgePage) },
                 onSettings = { onNavigate(Destination.SettingsPage) }
             )
         },

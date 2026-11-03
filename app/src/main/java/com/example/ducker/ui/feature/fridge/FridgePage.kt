@@ -104,7 +104,7 @@ fun FridgePage(
         topBar = {
             DuckerTopBar(
                 title = "Mon frigo",
-                onBack = { onNavigate(Destination.HomePage) },
+                onBack = { onNavigate(Destination.FridgePage) },
                 onSettings = { onNavigate(Destination.SettingsPage) }
             )
         },
