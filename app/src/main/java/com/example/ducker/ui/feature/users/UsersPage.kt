@@ -36,11 +36,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.ducker.Destination
 import com.example.ducker.ui.DuckerViewModel
+import com.example.ducker.ui.UserFrigoViewModel
 import com.example.ducker.ui.components.BottomNavBar
 import com.example.ducker.ui.components.DuckerTopBar
+import com.example.ducker.ui.feature.fridge.IngredientItem
+import androidx.compose.foundation.lazy.items
 
 @Composable
 fun UsersPage(
@@ -54,7 +58,16 @@ fun UsersPage(
     val users by viewModel.users.collectAsState()
     val matchedUser = users.find { it.id == userId }
 
-    // ---- En-tête rétractable : l'image rétrécit quand la liste défile ----
+    // Récupération du ViewModel du frigo pour cet utilisateur spécifique
+    val userFrigoViewModel: UserFrigoViewModel = viewModel(
+        key = "frigo_$userId",
+        factory = UserFrigoViewModel.Factory(
+            repository = viewModel.repository,
+            userId = userId
+        )
+    )
+    val ingredients by userFrigoViewModel.ingredients.collectAsState()
+
     val density = LocalDensity.current
     val maxPx = with(density) { maxImageSize.toPx() }
     val minPx = with(density) { minImageSize.toPx() }
@@ -161,14 +174,14 @@ fun UsersPage(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
-                    item {
-                        Button(
-                            onClick = { onNavigate(Destination.FrigoUser(userId)) },
+
+                    items(ingredients) { ingredient ->
+                        IngredientItem(
+                            ingredient = ingredient,
                             modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(text = "Voir son frigo")
-                        }
+                        )
                     }
+
                 }
             }
         }

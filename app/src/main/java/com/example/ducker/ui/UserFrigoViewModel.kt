@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class UserFrigoViewModel(
@@ -27,15 +28,15 @@ class UserFrigoViewModel(
             initialValue = null
         )
 
-    // Récupération des ingrédients grâce au UseCase
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val ingredients: StateFlow<List<Ingredient>> = frigo
-        .flatMapLatest { frigoEntity ->
-            if (frigoEntity != null) {
-                // Utilisation UseCase
-                getIngredientsUseCase(frigoEntity.id)
+        .flatMapLatest { currentFrigo ->
+            if (currentFrigo == null) {
+                flowOf(emptyList<Ingredient>())
             } else {
-                flowOf(emptyList())
+                repository.getIngredients(currentFrigo.id)
+                    .map { entities -> entities.map { it.toDomain() } }
             }
         }
         .stateIn(
@@ -43,6 +44,7 @@ class UserFrigoViewModel(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList()
         )
+
 
     // La Factory propre et facile
     class Factory(

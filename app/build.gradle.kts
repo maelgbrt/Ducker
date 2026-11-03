@@ -38,6 +38,7 @@ android {
 }
 
 dependencies {
+    implementation("com.google.code.gson:gson:2.10.1")
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.foundation.layout)
@@ -52,6 +53,7 @@ dependencies {
     implementation(platform("androidx.compose:compose-bom:2026.06.00"))
     implementation(libs.androidx.ui)
     implementation("androidx.compose.material:material-icons-core")
+    implementation(libs.firebase.crashlytics.buildtools)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)

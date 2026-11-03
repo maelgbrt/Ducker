@@ -1,68 +1,42 @@
 package com.example.ducker.ui.feature.fridge
 
-//import android.widget.Toast
-import androidx.annotation.DrawableRes
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.launch
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-//import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-//import androidx.compose.foundation.lazy.items
-//import androidx.compose.foundation.magnifier
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-//import androidx.compose.foundation.style.styleable
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-//import androidx.compose.runtime.getValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-//import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-//import androidx.lifecycle.compose.collectAsStateWithLifecycle
-//import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.core.content.ContextCompat
 import com.example.ducker.Destination
 import com.example.ducker.domain.data.Ingredient
-import com.example.ducker.ui.theme.primaryLight
-import com.example.ducker.R
-import com.example.ducker.ui.theme.onPrimaryLight
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import com.example.ducker.domain.data.CategorieIngredient
 import com.example.ducker.local.entity.UserEntity
-import com.example.ducker.ui.components.BottomNavBar
-import com.example.ducker.ui.components.DuckerTopBar
 import com.example.ducker.ui.DuckerViewModel
 import com.example.ducker.ui.UserFrigoViewModel
+import com.example.ducker.ui.components.BottomNavBar
+import com.example.ducker.ui.components.DuckerTopBar
+import com.example.ducker.ui.theme.onPrimaryLight
+import com.example.ducker.ui.theme.primaryLight
 import coil.compose.rememberAsyncImagePainter
+import java.io.File
+import java.io.FileOutputStream
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,12 +45,58 @@ fun FridgePage(
     viewModel: DuckerViewModel,
     frigoViewModel: UserFrigoViewModel,
     onNavigate: (Destination) -> Unit,
-
-    ) {
+) {
+    val context = LocalContext.current
     val users by viewModel.users.collectAsState()
     val frigo by frigoViewModel.frigo.collectAsState()
     val ingredients by frigoViewModel.ingredients.collectAsState()
     val me = users.firstOrNull { it.id == "user_001" }
+
+    // Fichier local dans le stockage interne
+    val photoFile = remember { File(context.filesDir, "frigo_photo.jpg") }
+
+    // État pour stocker le Bitmap de la session en cours (rafraîchissement immédiat)
+    var capturedBitmap by remember { mutableStateOf<Bitmap?>(null) }
+
+    // Lanceur de l'appareil photo
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicturePreview()
+    ) { bitmap ->
+        if (bitmap != null) {
+            saveBitmapToInternalStorage(context, bitmap, "frigo_photo.jpg")
+            capturedBitmap = bitmap // Met à jour le state pour forcer l'affichage instantané
+        }
+    }
+
+    // Lanceur de permission de la caméra
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            cameraLauncher.launch()
+        }
+    }
+
+    val openCameraAction = {
+        when {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                cameraLauncher.launch()
+            }
+            else -> {
+                permissionLauncher.launch(Manifest.permission.CAMERA)
+            }
+        }
+    }
+
+    // Détermination de la source de l'image à afficher
+    val imageModel: Any? = when {
+        capturedBitmap != null -> capturedBitmap
+        photoFile.exists() -> photoFile
+        else -> me?.photo
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -96,11 +116,12 @@ fun FridgePage(
         ) {
             UserCard(
                 user = me,
+                imageModel = imageModel,
                 frigoId = frigo?.id?.toString(),
+                onPhotoClick = openCameraAction,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
-
             )
 
             LazyColumn(
@@ -124,6 +145,19 @@ fun FridgePage(
                 }
             }
         }
+    }
+}
+
+// Fonction utilitaire pour enregistrer le bitmap localement
+fun saveBitmapToInternalStorage(context: Context, bitmap: Bitmap, fileName: String) {
+    try {
+        val file = File(context.filesDir, fileName)
+        val fos = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos)
+        fos.flush()
+        fos.close()
+    } catch (e: Exception) {
+        e.printStackTrace()
     }
 }
 
@@ -163,7 +197,9 @@ fun IngredientItem(
 @Composable
 fun UserCard(
     user: UserEntity?,
+    imageModel: Any?,
     frigoId: String?,
+    onPhotoClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (user == null) {
@@ -177,16 +213,21 @@ fun UserCard(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Image(
-                painter = rememberAsyncImagePainter(model = user.photo),
-                contentDescription = "Photo de profil",
-                contentScale = ContentScale.Crop,
+            // Photo cliquable pour lancer la caméra
+            Box(
                 modifier = Modifier
                     .size(100.dp)
                     .clip(RoundedCornerShape(12.dp))
-            )
+                    .clickable(onClick = onPhotoClick)
+            ) {
+                Image(
+                    painter = rememberAsyncImagePainter(model = imageModel),
+                    contentDescription = "Photo de profil ou du frigo",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
 
-            // Bloc de bienvenue coloré
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -212,7 +253,6 @@ fun UserCard(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Nom et localisation sortis de la Row pour occuper toute la largeur proprement
         Text(
             text = "${user.prenom} ${user.nom}",
             style = MaterialTheme.typography.titleLarge,

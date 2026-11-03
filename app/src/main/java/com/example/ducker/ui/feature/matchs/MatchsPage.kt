@@ -94,8 +94,19 @@ fun MatchsPage(
 
     val onMatch: () -> Unit = {
         currentUser?.let { user ->
+            // On enregistre virtuellement ou on passe à la suite de l'exploration
             viewModel.registerLikeOrDislike(targetUserId = user.id, isLike = true)
-            onNavigate(Destination.UsersPage(userId = user.id))
+
+            // On interroge le ViewModel pour voir si le JSON indique un like réciproque
+            val isMutualMatch = viewModel.checkMutualMatch(user.id)
+
+            if (isMutualMatch) {
+                // S'ils se sont déjà likés dans le fichier de base, on ouvre la page de match
+                onNavigate(Destination.UsersPage(userId = user.id))
+            } else {
+                // Sinon, l'autre ne l'a pas liké dans le JSON, on passe au profil suivant
+                currentIndex++
+            }
         }
     }
 
