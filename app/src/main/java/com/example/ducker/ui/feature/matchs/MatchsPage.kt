@@ -208,7 +208,7 @@ fun SwipeableCard(
             modifier = Modifier.fillMaxSize()
         ) {
             Image(
-                painter = rememberAsyncImagePainter(model = user.photo), //erreur : Unresolved reference 'rememberAsyncImagePainter'.
+                painter = rememberAsyncImagePainter(model = user.photo),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
