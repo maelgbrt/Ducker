@@ -18,12 +18,11 @@ import com.example.ducker.data.local.entity.UserLikeEntity
         IngredientEntity::class,
         UserLikeEntity::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class DuckerDatabase : RoomDatabase() {
 
-    // On expose nos 3 DAO
     abstract fun userDao(): UserDao
     abstract fun frigoDao(): FrigoDao
     abstract fun ingredientDao(): IngredientDao

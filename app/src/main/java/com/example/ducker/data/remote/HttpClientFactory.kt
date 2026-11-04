@@ -21,7 +21,7 @@ object HttpClientFactory {
                 )
             }
             install(Logging) {
-                level = LogLevel.BODY // Passe à BODY pour voir tout le contenu JSON dans les logs
+                level = LogLevel.BODY
             }
             install(HttpTimeout) {
                 requestTimeoutMillis = 15_000

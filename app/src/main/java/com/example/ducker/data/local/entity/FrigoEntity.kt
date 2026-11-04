@@ -9,7 +9,7 @@ import com.example.ducker.domain.model.Ingredient
 @Entity(tableName = "frigos")
 data class FrigoEntity(
     @PrimaryKey val id: String,
-    val userId: String, // Clé pour lier le frigo à son utilisateur
+    val userId: String,
     val photo: String
 ) {
     // Convertit l'entité Room en objet du Domaine Frigo

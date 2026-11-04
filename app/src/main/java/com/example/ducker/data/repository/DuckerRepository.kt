@@ -56,4 +56,24 @@ class DuckerRepository(
     fun getDislikesNames(userId: String) = likeDao.getDislikedUsers(userId)
     suspend fun saveLike(userLikeEntity: UserLikeEntity) = likeDao.insertOrUpdateLike(userLikeEntity)
     fun getVotedTargetUserIds(currentUserId: String) = likeDao.getVotedTargetUserIds(currentUserId)
+
+    suspend fun addIngredient(ingredient: IngredientEntity) {
+        ingredientDao.upsertIngredients(listOf(ingredient))
+    }
+
+    suspend fun ensureFrigo(userId: String): String {
+        val frigoId = "frigo_$userId"
+        frigoDao.upsertFrigo(
+            FrigoEntity(
+                id = frigoId,
+                userId = userId,
+                photo = ""
+            )
+        )
+        return frigoId
+    }
+
+    suspend fun deleteIngredient(ingredientId: String) {
+        ingredientDao.deleteIngredient(ingredientId)
+    }
 }

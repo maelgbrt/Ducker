@@ -69,4 +69,5 @@ dependencies {
     implementation(libs.ktor.client.logging)
     implementation(libs.kotlinx.serialization.json)
     implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation("androidx.compose.material:material-icons-core")
 }

@@ -38,7 +38,6 @@ data class RemoteIngredient(
 
 
 
-// --- Fonctions de mapping (conversion vers ce qui est en local ) ---
 
 fun RemoteUser.toDomain(): User {
     return User(
@@ -49,13 +48,12 @@ fun RemoteUser.toDomain(): User {
         photo = photo ?: "",
         nombreIngredients = nombre_ingredients,
         frigo = frigo?.toDomain() ?: Frigo.empty(),
-        likes = emptyList(),    // Si tu les gères plus tard
-        dislikes = emptyList()  // Si tu les gères plus tard
+        likes = emptyList(),
+        dislikes = emptyList()
     )
 }
 
 fun RemoteIngredient.toDomain(): Ingredient {
-    // Conversion sécurisée pour accepter les textes du JSON sans planter
     val categorieEnum = when (categorie?.lowercase()?.trim()) {
         "fruit", "fruits" -> CategorieIngredient.Fruit
         "legume", "legumes", "légume", "légumes" -> CategorieIngredient.Legume
@@ -77,7 +75,7 @@ fun RemoteIngredient.toDomain(): Ingredient {
 
 fun RemoteFrigo.toDomain(): Frigo {
     return Frigo(
-        photo = photo ?: "", // Gère le cas où l'URL de la photo est null
+        photo = photo ?: "",
         id = id,
         ingredients = ingredients?.map { it.toDomain() } ?: emptyList()
     )

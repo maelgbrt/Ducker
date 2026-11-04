@@ -9,7 +9,6 @@ object FoodApi {
 
     private val client = HttpClientFactory.create()
 
-    // On change le nom pour que ce soit plus logique (ça récupère toute l'API, pas juste les ingrédients)
     suspend fun fetchData(): RemoteApiResponse {
         return client.get(urlString = "$BASE_URL$PATH").body()
     }

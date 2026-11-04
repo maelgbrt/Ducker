@@ -13,4 +13,7 @@ interface IngredientDao {
 
     @Query("SELECT * FROM ingredients WHERE frigoId = :frigoId")
     fun getIngredientsForFrigo(frigoId: String): Flow<List<IngredientEntity>>
+
+    @Query("DELETE FROM ingredients WHERE id = :ingredientId")
+    suspend fun deleteIngredient(ingredientId: String)
 }

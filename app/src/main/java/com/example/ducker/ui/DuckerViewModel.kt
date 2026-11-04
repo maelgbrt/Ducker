@@ -40,7 +40,7 @@ class DuckerViewModel(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                e.printStackTrace() // <-- Regarde dans l'onglet "Logcat" d'Android Studio ce qui s'affiche ici
+                e.printStackTrace()
                 _error.value = e.message ?: "Erreur de synchronisation"
             }
         }

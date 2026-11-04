@@ -1,14 +1,13 @@
 package com.example.ducker.data.local.entity
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity(tableName = "user_likes")
+@Entity(
+    tableName = "user_likes",
+    primaryKeys = ["userId", "targetUserId"]
+)
 data class UserLikeEntity(
-    @PrimaryKey (autoGenerate = true) val id: Long = 0,
-    val userId : String,
-    val targetUserId : String,
-    val isLike : Boolean
-){
-
-}
+    val userId: String,
+    val targetUserId: String,
+    val isLike: Boolean
+)

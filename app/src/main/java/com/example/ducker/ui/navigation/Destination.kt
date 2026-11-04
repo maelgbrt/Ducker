@@ -3,9 +3,8 @@ package com.example.ducker.ui.navigation
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-@Serializable // 👈 Indispensable aussi sur l'interface parent
+@Serializable
 sealed interface Destination : NavKey {
-//    annotation class Users(val value: Any)
 
     @Serializable
     data object HomePage : Destination
@@ -18,6 +17,7 @@ sealed interface Destination : NavKey {
 
     @Serializable
     data object IngredientAjout : Destination
+
     @Serializable
     data object DiscoversPage : Destination
 
@@ -28,7 +28,10 @@ sealed interface Destination : NavKey {
     data object LikePage : Destination
 
     @Serializable
-    data class FrigoUser(val userId: String) : Destination //on met une class car ya des paramètres
+    data class FrigoUser(
+        val userId: String,
+        val readOnly: Boolean = false
+    ) : Destination
 
     @Serializable
     data object MatchsPage : Destination

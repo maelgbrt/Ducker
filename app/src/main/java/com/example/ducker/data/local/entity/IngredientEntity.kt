@@ -8,11 +8,11 @@ import com.example.ducker.domain.model.Ingredient
 @Entity(tableName = "ingredients")
 data class IngredientEntity(
     @PrimaryKey val id: String,
-    val frigoId: String, // Clé pour lier l'ingrédient à son frigo
+    val frigoId: String,
     val nomIngredients: String,
     val descriptionIngredients: String,
     val datePeremptionIngredients: String,
-    val categorieIngredient: String // On stocke l'enum en String dans Room
+    val categorieIngredient: String
 ) {
     // Convertit l'entité Room en objet du Domaine Ingredient
     fun toDomain(): Ingredient {
@@ -23,7 +23,7 @@ data class IngredientEntity(
             categorieIngredient = try {
                 CategorieIngredient.valueOf(categorieIngredient)
             } catch (e: Exception) {
-                CategorieIngredient.AUTRE // Valeur de repli par sécurité
+                CategorieIngredient.AUTRE
             }
         )
     }
